@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import MovieList from "./components/MovieList";
+import ThemeToggle from "./components/ThemeToggle";
 import './App.css'
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
   const [searchTerm, setSeachTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [theme, setTheme] = useState('dark');
 
   const searchMovies = async (title) => {
     setIsLoading(true)
@@ -31,6 +33,9 @@ function App() {
       setError(null)
     }
   }
+  const toggleTheme = () => {
+    setTheme(theme == 'dark' ? 'light' : 'dark');
+  }
 
   useEffect(() => {
     if (searchTerm) {
@@ -40,6 +45,8 @@ function App() {
 
   return (
     <div className="app">
+      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+
       <h1>MovieLand</h1>
       <SearchBar setSeachTerm={setSeachTerm} />
 
