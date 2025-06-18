@@ -6,7 +6,7 @@ const MovieCard = ({ movie, onClick, theme, index }) => {
             className={`movie-card ${theme}`}
             onClick={onClick}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ delay: index * 0.06, duration: 0.3 }}
+            animate={{ opacity: 1, delay: index * 0.06, duration: 0.3 }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
         >
