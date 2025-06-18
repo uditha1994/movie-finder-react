@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
-const SearchBar = ({ setSeachTerm }) => {
+const SearchBar = ({ setSeachTerm, theme }) => {
     const [input, setInput] = useState('')
 
     const handleSubmit = (e) => {
@@ -9,15 +10,22 @@ const SearchBar = ({ setSeachTerm }) => {
     }
 
     return (
-        <form className="search" onSubmit={handleSubmit}>
+        <motion.form
+            className={`search ${theme}`}
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+        >
             <input
                 type="text"
                 placeholder="Search for movies..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             />
-            <button type="submit">Search</button>
-        </form>
+            <button type="submit">
+                <span className="search-icon">🔍</span>Search
+            </button>
+        </motion.form>
     )
 }
 

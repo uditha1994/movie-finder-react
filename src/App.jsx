@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import MovieList from "./components/MovieList";
 import ThemeToggle from "./components/ThemeToggle";
+import MovieDetails from "./components/MovieDetails";
 import './App.css'
 
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [searchTerm, setSeachTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [theme, setTheme] = useState('dark');
+  const [movies, setMovies] = useState([])
+  const [searchTerm, setSeachTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [theme, setTheme] = useState('dark')
+  const [selectedMovie, setSelectedMovie] = useState(null)
 
   const searchMovies = async (title) => {
     setIsLoading(true)
@@ -33,6 +35,21 @@ function App() {
       setError(null)
     }
   }
+
+  const fetchMovieDetails = async (id) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=3b712349`)
+      const data = await response.json()
+      setSelectedMovie(data)
+
+    } catch (error) {
+      setError('Failed to fetch movie details')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const toggleTheme = () => {
     setTheme(theme == 'dark' ? 'light' : 'dark');
   }
@@ -44,16 +61,31 @@ function App() {
   }, [searchTerm])
 
   return (
-    <div className="app">
+    <div className={`app ${theme}`}>
       <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
 
-      <h1>MovieLand</h1>
-      <SearchBar setSeachTerm={setSeachTerm} />
+      {selectedMovie ? (
+        <MovieDetails
+          movie={selectedMovie}
+          onBack={() => setSelectedMovie(null)}
+          theme={theme}
+        />
+      ) : (
+        <>
+          <h1 className="app-title">🎞 MovieLand 🍿</h1>
+          <SearchBar setSeachTerm={setSeachTerm}
+            theme={theme} />
 
-      {isLoading && <div className="loading">Loading...</div>}
-      {error && <div className="error">{error}</div>}
+          {isLoading && <div className="loading">Loading...</div>}
+          {error && <div className="error">{error}</div>}
 
-      <MovieList movies={movies} />
+          <MovieList
+            movies={movies}
+            onMovieSelect={fetchMovieDetails}
+            theme={theme}
+          />
+        </>
+      )}
     </div>
   )
 }
