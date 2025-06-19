@@ -72,7 +72,7 @@ function App() {
         />
       ) : (
         <>
-          <h1 className="app-title">🎞 MovieLand 🍿</h1>
+          <h1 className="app-title">&nbsp;MovieLand&nbsp;</h1>
           <SearchBar setSeachTerm={setSeachTerm}
             theme={theme} />
 
